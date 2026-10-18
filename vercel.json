@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "https://dating-backend-59ur.onrender.com/api/:path*" },
+    { "source": "/socket.io/:path*", "destination": "https://dating-backend-59ur.onrender.com/socket.io/:path*" },
+    { "source": "/((?!assets/|icons/|\\.well-known/|sw\\.js|manifest\\.webmanifest).*)", "destination": "/index.html" }
+  ]
+}

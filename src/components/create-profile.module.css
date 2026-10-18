@@ -1,0 +1,40 @@
+.page { --ink:#1f1633; --muted:#6b647c; --line:#e3deef; --bg:#f7f5fb; --card:#fff; --accent:#6a3fd1; --accent-soft:#efe8fd; --danger:#c0293f;
+  max-width: 640px; margin: 0 auto; padding: 24px 16px 48px; color: var(--ink); background: var(--bg); font-family: 'Segoe UI', system-ui, sans-serif; }
+.title { font-size: 1.9rem; margin: 0 0 4px; }
+.sub { margin: 0 0 20px; color: var(--muted); }
+.status { text-align: center; padding: 48px 0; }
+
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; margin-bottom: 16px; display: grid; gap: 14px; }
+.card h2 { font-size: 1.05rem; margin: 0; }
+.card h2 small, .field small { color: var(--muted); font-weight: 400; }
+
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field { display: grid; gap: 6px; font-size: .9rem; font-weight: 600; }
+.field input, .field select, .field textarea { font: inherit; font-weight: 400; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink); }
+.field textarea { resize: vertical; }
+.field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible,
+.chip:focus-visible, .slot:focus-visible, .submit:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font: inherit; font-size: .88rem; padding: 7px 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--ink); cursor: pointer; }
+.chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.options { display: grid; gap: 10px; }
+.option { display: grid; gap: 2px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; cursor: pointer; position: relative; }
+.option input { position: absolute; opacity: 0; }
+.option span { color: var(--muted); font-size: .88rem; }
+.option.on { border-color: var(--accent); background: var(--accent-soft); }
+.option:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.photos { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.photo { display: grid; gap: 8px; }
+.slot { aspect-ratio: 4 / 5; border: 2px dashed var(--line); border-radius: 12px; background: var(--bg); color: var(--muted); cursor: pointer; overflow: hidden; padding: 0; font: inherit; }
+.slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.caption { font: inherit; font-size: .88rem; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; }
+
+.error { color: var(--danger); margin: 0 0 12px; }
+.ok { color: #1c7a47; margin: 0 0 12px; }
+.submit { width: 100%; font: inherit; font-weight: 700; padding: 14px; border: 0; border-radius: 12px; background: var(--accent); color: #fff; cursor: pointer; }
+.submit:disabled { opacity: .6; cursor: wait; }
+
+@media (max-width: 480px) { .row { grid-template-columns: 1fr; } }

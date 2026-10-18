@@ -1,0 +1,82 @@
+/* ==========================================================
+   Kindred – shared bottom navigation (icons only)
+   Har page pe same. Pages isse bachne ke liye padding-bottom me
+   calc(var(--nav-h) + env(safe-area-inset-bottom, 0px)) use karein.
+   ========================================================== */
+
+:root {
+  --nav-h: 64px;
+}
+
+.bnav {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  z-index: 30;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 560px;                         /* tablet/desktop pe bhi phone jaisa */
+  height: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: #000;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.bnav__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;                         /* thumb-friendly */
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #6f6f6f;                           /* inactive = grey */
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: color 0.15s ease;
+}
+.bnav__item.is-active,
+.bnav__item:active { color: #fff; }         /* active = bright white */
+
+.bnav__item:focus-visible {
+  outline: 2px solid #e5141f;
+  outline-offset: -4px;
+}
+
+.bnav__iconwrap { position: relative; display: block; line-height: 0; }
+
+.bnav__icon {
+  display: block;
+  width: 28px;
+  height: 28px;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+.bnav__badge {
+  position: absolute;
+  top: -7px;
+  right: -11px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 5px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #e5141f;
+  color: #fff;
+  font: 700 10px/1 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  box-shadow: 0 0 0 2px #000;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bnav__item { transition: none; }
+}

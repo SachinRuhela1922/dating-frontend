@@ -1,0 +1,368 @@
+/* ==========================================================
+   Kindred – Browse (mobile-first, PWA-ready)
+   Same theme as Dashboard: white + black, red accent
+   ========================================================== */
+
+.page {
+  --white: #ffffff;
+  --paper: #f3f3f3;
+  --line: #dcdcdc;
+  --ink: #000000;
+  --ink-soft: #5c5c5c;
+  --red: #e5141f;
+  --red-press: #b80f18;
+  --bar-h: 78px;
+
+  position: relative;
+  max-width: 560px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 0 16px calc(var(--bar-h) + var(--nav-h, 64px) + env(safe-area-inset-bottom, 0px) + 24px);
+  background: var(--white);
+  color: var(--ink);
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+
+/* ---------- No text copy / no image download ---------- */
+.page,
+.page * {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+.page img,
+.page svg {
+  -webkit-user-drag: none;
+  pointer-events: none;                /* long-press "save image" blocked */
+}
+.page ::selection { background: transparent; }
+
+/* typing must still work */
+.page input,
+.page select,
+.page textarea {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* ---------- Top bar ---------- */
+.top {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 -16px;
+  padding: calc(env(safe-area-inset-top, 0px) + 10px) 16px 10px;
+  background: var(--white);
+  border-bottom: 1px solid var(--line);
+}
+.top h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.back {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  color: var(--ink);
+  text-decoration: none;
+}
+.back:active { background: var(--ink); color: var(--white); }
+.back svg { width: 22px; height: 22px; }
+
+/* ---------- Filters ---------- */
+.filters {
+  margin: 14px 0;
+  border: 1.5px solid var(--ink);
+  border-radius: 14px;
+  background: var(--white);
+  padding: 0 14px;
+}
+.filters summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  font-size: 16px;
+  font-weight: 700;
+  list-style: none;
+  cursor: pointer;
+}
+.filters summary::-webkit-details-marker { display: none; }
+.filters summary::after {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-right: 2.5px solid var(--ink);
+  border-bottom: 2.5px solid var(--ink);
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform 0.15s ease;
+}
+.filters[open] summary::after { transform: rotate(-135deg) translate(-2px, -2px); }
+
+.fform {
+  display: grid;
+  gap: 14px;
+  padding: 4px 0 16px;
+}
+.fform label {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+.fform input,
+.fform select {
+  min-height: 46px;
+  padding: 0 12px;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  background: var(--white);
+  color: var(--ink);
+  font-size: 16px;                    /* 16px stops iOS zoom-on-focus */
+  font-weight: 500;
+  font-family: inherit;
+}
+.fform input:focus,
+.fform select:focus {
+  outline: none;
+  border-color: var(--red);
+}
+.frow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.flabel {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+.fchips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.fchips button {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+}
+.fchips button.fon {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--white);
+}
+
+/* ---------- Profile card ---------- */
+.card {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 12px;
+  border: 1.5px solid var(--ink);
+  border-radius: 20px;
+  background: var(--white);
+}
+.main {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 14px;
+  background: var(--paper);
+}
+.thumbs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.thumbs button {
+  padding: 0;
+  border: 2.5px solid transparent;
+  border-radius: 10px;
+  overflow: hidden;
+  background: none;
+  opacity: 0.55;
+  cursor: pointer;
+}
+.thumbs button.on {
+  border-color: var(--red);
+  opacity: 1;
+}
+.thumbs img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+.caption {
+  margin: 0;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+.card h2 {
+  margin: 4px 0 0;
+  font-size: 28px;
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+.meta {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+.bio {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.55;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chips span {
+  padding: 7px 13px;
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ---------- Note input ---------- */
+.note {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 50px;
+  margin-top: 14px;
+  padding: 0 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: var(--white);
+  color: var(--ink);
+  font-size: 16px;
+  font-family: inherit;
+}
+.note:focus { outline: none; border-color: var(--red); }
+
+/* ---------- Buttons ---------- */
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.skip,
+.req {
+  min-height: 54px;
+  padding: 0 16px;
+  border-radius: 14px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.skip {
+  background: transparent;
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+}
+.skip:active { background: var(--ink); color: var(--white); }
+.req {
+  background: var(--red);
+  color: var(--white);
+  border: 0;
+}
+.req:active { background: var(--red-press); }
+.skip:disabled,
+.req:disabled { opacity: 0.55; }
+.skip:focus-visible,
+.req:focus-visible,
+.back:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 2px;
+}
+
+/* Next / Request: bottom nav ke theek upar fixed (thumb zone) */
+.bar {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--nav-h, 64px) + env(safe-area-inset-bottom, 0px));
+  z-index: 20;
+  width: 100%;
+  max-width: 560px;
+  transform: translateX(-50%);
+  box-sizing: border-box;
+  padding: 12px 16px;
+  background: var(--white);
+  border-top: 1px solid var(--line);
+}
+.bar .actions { margin: 0; }
+
+/* Filter form buttons sit inside the form */
+.fform .actions { margin-top: 4px; }
+
+/* ---------- Status ---------- */
+.msg {
+  padding: 48px 0;
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 16px;
+}
+.msg p { margin: 0 0 16px; }
+.msg .req { min-width: 200px; }
+
+.error,
+.ok {
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.error {
+  background: #fdeced;
+  border-left: 4px solid var(--red);
+  color: var(--red-press);
+}
+.ok {
+  background: var(--ink);
+  color: var(--white);
+}
+
+@media (max-width: 360px) {
+  .card h2 { font-size: 24px; }
+  .frow { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filters summary::after { transition: none; }
+}

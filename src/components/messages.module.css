@@ -1,0 +1,174 @@
+/* ==========================================================
+   Kindred – Messages list (mobile-first, PWA-ready)
+   Theme: white + black, red accent. Shared BottomNav neeche.
+   ========================================================== */
+
+.page {
+  --white: #ffffff;
+  --paper: #f3f3f3;
+  --line: #e4e4e4;
+  --ink: #000000;
+  --ink-soft: #5c5c5c;
+  --red: #e5141f;
+  --red-press: #b80f18;
+
+  max-width: 560px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 0 16px calc(var(--nav-h, 64px) + env(safe-area-inset-bottom, 0px) + 24px);
+  background: var(--white);
+  color: var(--ink);
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+
+/* ---------- No text copy / no image download ---------- */
+.page,
+.page * {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+.page img,
+.page svg {
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+.page ::selection { background: transparent; }
+
+/* ---------- Top bar ---------- */
+.top {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 -16px;
+  padding: calc(env(safe-area-inset-top, 0px) + 10px) 16px 10px;
+  background: var(--white);
+  border-bottom: 1px solid var(--line);
+}
+.top h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.back {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  color: var(--ink);
+  text-decoration: none;
+}
+.back:active { background: var(--ink); color: var(--white); }
+.back svg { width: 22px; height: 22px; }
+.back:focus-visible,
+.row:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 2px;
+}
+
+/* ---------- Chat list ---------- */
+.list {
+  margin: 8px -16px 0;                       /* rows edge-to-edge */
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 76px;
+  padding: 10px 16px;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+}
+.row:active { background: var(--paper); }
+
+.avatarSm {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--paper);
+}
+
+.rowText {
+  flex: 1;
+  min-width: 0;                              /* ellipsis ke liye zaroori */
+}
+.rowText strong {
+  display: block;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.meta {
+  margin: 3px 0 0;
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* unread chat: naam aur message bold + black */
+.unreadRow .rowText strong { font-weight: 800; }
+.unreadRow .meta {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.badge {
+  flex: none;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 8px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--red);
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ---------- Status ---------- */
+.msg {
+  padding: 56px 8px;
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.error {
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border-left: 4px solid var(--red);
+  border-radius: 10px;
+  background: #fdeced;
+  color: var(--red-press);
+  font-size: 14px;
+  font-weight: 600;
+}

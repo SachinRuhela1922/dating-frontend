@@ -1,0 +1,245 @@
+/* ==========================================================
+   Kindred – Requests (mobile-first, PWA-ready)
+   Theme: white + black, red accent. Shared BottomNav neeche.
+   ========================================================== */
+
+.page {
+  --white: #ffffff;
+  --paper: #f3f3f3;
+  --line: #dcdcdc;
+  --ink: #000000;
+  --ink-soft: #5c5c5c;
+  --red: #e5141f;
+  --red-press: #b80f18;
+
+  max-width: 560px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 0 16px calc(var(--nav-h, 64px) + env(safe-area-inset-bottom, 0px) + 24px);
+  background: var(--white);
+  color: var(--ink);
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+
+/* ---------- No text copy / no image download ---------- */
+.page,
+.page * {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+.page img,
+.page svg {
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+.page ::selection { background: transparent; }
+
+/* ---------- Top bar ---------- */
+.top {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 -16px;
+  padding: calc(env(safe-area-inset-top, 0px) + 10px) 16px 10px;
+  background: var(--white);
+  border-bottom: 1px solid var(--line);
+}
+.top h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.back {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  color: var(--ink);
+  text-decoration: none;
+}
+.back:active { background: var(--ink); color: var(--white); }
+.back svg { width: 22px; height: 22px; }
+
+/* ---------- List ---------- */
+.list {
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.item {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border: 1.5px solid var(--ink);
+  border-radius: 20px;
+  background: var(--white);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.avatar {
+  flex: none;
+  width: 76px;
+  height: 76px;
+  border-radius: 16px;
+  object-fit: cover;
+  background: var(--paper);
+}
+
+.info { min-width: 0; }                      /* long names wrap, layout na toote */
+
+.info h2 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  overflow-wrap: anywhere;
+}
+
+.meta {
+  margin: 4px 0 0;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+
+/* sender ka note */
+.noteText {
+  margin: 0;
+  padding: 10px 14px;
+  border-left: 4px solid var(--red);
+  border-radius: 4px 12px 12px 4px;
+  background: var(--paper);
+  font-size: 15px;
+  font-style: italic;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.bio {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;                     /* lambi bio card ko lamba na kare */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chips span {
+  padding: 7px 13px;
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ---------- Actions ---------- */
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: center;
+  margin-top: 2px;
+}
+
+.primary,
+.secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: 52px;
+  padding: 0 16px;
+  border-radius: 14px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+.primary {
+  background: var(--red);
+  color: var(--white);
+  border: 0;
+}
+.primary:active { background: var(--red-press); }
+.secondary {
+  background: transparent;
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+}
+.secondary:active { background: var(--ink); color: var(--white); }
+.primary:disabled,
+.secondary:disabled { opacity: 0.55; }
+.primary:focus-visible,
+.secondary:focus-visible,
+.back:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 2px;
+}
+
+/* accept hone ke baad ka status */
+.ok {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0 12px;
+  border-radius: 14px;
+  background: var(--ink);
+  color: var(--white);
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* ---------- Status ---------- */
+.msg {
+  padding: 56px 0;
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 16px;
+}
+
+.error {
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border-left: 4px solid var(--red);
+  border-radius: 10px;
+  background: #fdeced;
+  color: var(--red-press);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+@media (max-width: 360px) {
+  .avatar { width: 64px; height: 64px; }
+  .info h2 { font-size: 19px; }
+}

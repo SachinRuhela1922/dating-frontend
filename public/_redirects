@@ -1,0 +1,3 @@
+/api/*        https://dating-backend-59ur.onrender.com/api/:splat        200
+/socket.io/*  https://dating-backend-59ur.onrender.com/socket.io/:splat  200
+/*            /index.html                                                 200

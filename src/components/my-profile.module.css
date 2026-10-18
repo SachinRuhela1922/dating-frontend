@@ -1,0 +1,235 @@
+/* ==========================================================
+   Kindred – My profile (mobile-first, PWA-ready)
+   Theme: white + black, red accent. Shared BottomNav neeche.
+   ========================================================== */
+
+.page {
+  --white: #ffffff;
+  --paper: #f3f3f3;
+  --line: #e4e4e4;
+  --ink: #000000;
+  --ink-soft: #5c5c5c;
+  --red: #e5141f;
+  --red-press: #b80f18;
+
+  max-width: 560px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 0 16px calc(var(--nav-h, 64px) + env(safe-area-inset-bottom, 0px) + 24px);
+  background: var(--white);
+  color: var(--ink);
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+
+/* ---------- No text copy / no image download ---------- */
+.page,
+.page * {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+.page img,
+.page svg {
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+.page ::selection { background: transparent; }
+
+/* ---------- Top bar ---------- */
+.top {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 -16px;
+  padding: calc(env(safe-area-inset-top, 0px) + 10px) 16px 10px;
+  background: var(--white);
+  border-bottom: 1px solid var(--line);
+}
+.top h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.back {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  color: var(--ink);
+  text-decoration: none;
+}
+.back:active { background: var(--ink); color: var(--white); }
+.back svg { width: 22px; height: 22px; }
+.back:focus-visible,
+.edit:focus-visible,
+.del:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 2px;
+}
+
+/* ---------- Photos: swipe karke dekho ---------- */
+.photos {
+  display: flex;
+  gap: 10px;
+  margin: 16px -16px 0;
+  padding: 0 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0 16px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.photos::-webkit-scrollbar { display: none; }
+
+.photo {
+  flex: 0 0 86%;
+  margin: 0;
+  scroll-snap-align: start;
+}
+.photo:only-child { flex-basis: 100%; }
+
+.photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border: 1.5px solid var(--ink);
+  border-radius: 20px;
+  background: var(--paper);
+}
+.photo figcaption {
+  margin-top: 8px;
+  font-size: 14px;
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+
+/* ---------- Details ---------- */
+.name {
+  margin: 22px 0 0;
+  font-size: 32px;
+  line-height: 1.08;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
+}
+.meta {
+  margin: 6px 0 0;
+  font-size: 15px;
+  color: var(--ink-soft);
+}
+.bio {
+  margin: 14px 0 0;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.facts {
+  margin: 22px 0 0;
+  padding: 0;
+  border: 1.5px solid var(--ink);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.facts > div {
+  padding: 13px 16px;
+  background: var(--white);
+}
+.facts > div + div { border-top: 1px solid var(--line); }
+.facts dt {
+  margin: 0 0 3px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+.facts dd {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+.chips span {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ---------- Actions ---------- */
+.edit,
+.del {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 54px;
+  padding: 0 16px;
+  border-radius: 14px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+.edit {
+  margin-top: 26px;
+  background: var(--ink);
+  color: var(--white);
+  border: 0;
+}
+.edit:active { background: #333; }
+
+.del {
+  margin-top: 12px;
+  background: transparent;
+  color: var(--red);
+  border: 1.5px solid var(--red);
+}
+.del:active { background: var(--red); color: var(--white); }
+.del:disabled { opacity: 0.55; }
+
+/* ---------- Status ---------- */
+.msg {
+  padding: 56px 8px;
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 16px;
+}
+.error {
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border-left: 4px solid var(--red);
+  border-radius: 10px;
+  background: #fdeced;
+  color: var(--red-press);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+@media (max-width: 360px) {
+  .name { font-size: 27px; }
+}
