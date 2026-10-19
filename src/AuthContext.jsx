@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { api } from './api.js';
 import { readCache, writeCache, clearCache } from './cache.js';
+import { connectSocket, disconnectSocket } from './socket.js';
 
 const Ctx = createContext(null);
 export const useAuth = () => useContext(Ctx);
@@ -29,6 +30,10 @@ export function AuthProvider({ children }) {
     window.addEventListener('focus', refresh); // detect expiry when the tab regains focus
     return () => window.removeEventListener('focus', refresh);
   }, [refresh]);
+
+  // One socket for the whole signed-in session (not per page): events are never missed while navigating.
+  const signedIn = Boolean(user);
+  useEffect(() => { signedIn ? connectSocket() : disconnectSocket(); }, [signedIn]);
 
   const logout = async () => { try { await api('/auth/logout', { method: 'POST' }); } finally { clearCache(); setUser(null); } };
   return <Ctx.Provider value={{ user, setUser, logout, refresh }}>{children}</Ctx.Provider>;

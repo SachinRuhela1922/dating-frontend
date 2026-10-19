@@ -53,6 +53,7 @@ self.addEventListener('fetch', e => {
   // Private/live data: SW ko chhuna hi nahi
   if (url.origin === location.origin && (url.pathname.startsWith('/api') || url.pathname.startsWith('/socket.io'))) return;
   if (url.pathname.includes('/api/')) return; // cross-origin backend
+  if (url.pathname.startsWith('/socket.io')) return; // realtime socket (direct to the API host)
 
   // Page navigation: network first, fail hone par cached app shell
   if (req.mode === 'navigate') {

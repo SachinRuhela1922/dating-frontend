@@ -50,17 +50,26 @@ export default function Dashboard() {
       .catch(() => {}); // offline: cached value rehne do
   }, []);
 
-  // Activity tiles: pending requests + unread messages
+  // Activity tiles: pending requests + unread messages (live via the socket)
   useEffect(() => {
-    fetch('/api/connect/requests', { credentials: 'include' })
-      .then(r => r.json()).then(d => { const n = d.requests?.length || 0; setPending(n); writeCache('count:pending', n); }).catch(() => {});
-    fetch('/api/connect/unread', { credentials: 'include' })
-      .then(r => r.json()).then(d => { const n = d.count || 0; setUnread(n); writeCache('count:unread', n); }).catch(() => {});
+    const syncCounts = () => {
+      fetch('/api/connect/requests', { credentials: 'include' })
+        .then(r => r.json()).then(d => { const n = d.requests?.length || 0; setPending(n); writeCache('count:pending', n); }).catch(() => {});
+      fetch('/api/connect/unread', { credentials: 'include' })
+        .then(r => r.json()).then(d => { const n = d.count || 0; setUnread(n); writeCache('count:unread', n); }).catch(() => {});
+    };
+    syncCounts();
     const onMessage = () => setUnread(n => n + 1);
     const onRequest = () => setPending(n => n + 1);
+    const onRemoved = () => setPending(n => Math.max(0, n - 1));
     socket.on('message', onMessage);
     socket.on('request', onRequest);
-    return () => { socket.off('message', onMessage); socket.off('request', onRequest); };
+    socket.on('request:removed', onRemoved);
+    socket.on('connect', syncCounts); // (re)connected: catch up on anything missed
+    return () => {
+      socket.off('message', onMessage); socket.off('request', onRequest);
+      socket.off('request:removed', onRemoved); socket.off('connect', syncCounts);
+    };
   }, []);
 
   const fmt = d => (d ? new Date(d).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) : '—');

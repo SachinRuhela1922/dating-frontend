@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { socket, connectSocket } from '../socket.js';
 import BottomNav from './Bottomnav.jsx';
 import { readCache, writeCache } from '../cache.js';
 import s from './requests.module.css';
@@ -10,24 +11,49 @@ export default function Requests() {
   const [error, setError] = useState('');
   const [busy, setBusy] = useState('');
 
-  useEffect(() => {
+  const load = useCallback(() =>
     fetch('/api/connect/requests', { credentials: 'include' })
       .then(r => r.json())
-      .then(d => { setError(''); setItems(d.requests.map(x => ({ ...x, result: null }))); writeCache('requests', d.requests); hasData.current = true; })
-      .catch(() => { if (!hasData.current) setError('Requests load nahi ho payi.'); }); // cache hai toh purana dikhta rahe
-  }, []);
+      .then(d => {
+        setError('');
+        // keep rows already answered in this visit (they show "Accept ho gayi" until you leave)
+        setItems(old => [...d.requests.map(x => ({ ...x, result: null })), ...(old || []).filter(x => x.result && !d.requests.some(r => r.id === x.id))]);
+        writeCache('requests', d.requests); hasData.current = true;
+      })
+      .catch(() => { if (!hasData.current) setError('Requests load nahi ho payi.'); }), []); // cache hai toh purana dikhta rahe
 
+  useEffect(() => {
+    connectSocket();
+    load();
+    // New request: show it instantly (the event carries the full card). Old payload? just refetch.
+    const onRequest = ({ request }) => {
+      if (!request) return load();
+      setItems(list => ((list || []).some(x => x.id === request.id) ? list : [{ ...request, result: null }, ...(list || [])]));
+      writeCache('requests', [request, ...(readCache('requests') || []).filter(x => x.id !== request.id)]);
+      hasData.current = true;
+    };
+    const onRemoved = ({ id }) => setItems(list => (list || []).filter(x => x.id !== id || x.result)); // answered in another tab
+    socket.on('request', onRequest);
+    socket.on('request:removed', onRemoved);
+    socket.on('connect', load); // (re)connected: catch up on anything missed
+    return () => { socket.off('request', onRequest); socket.off('request:removed', onRemoved); socket.off('connect', load); };
+  }, [load]);
+
+  // Optimistic: the card flips immediately, and rolls back only if the server says no.
   const respond = async (item, action) => {
     setBusy(item.id); setError('');
+    const result = action === 'accept' ? 'accepted' : 'declined';
+    setItems(list => list.map(x => (x.id === item.id ? { ...x, result } : x)));
     try {
       const res = await fetch(`/api/connect/requests/${item.id}/${action}`, { method: 'POST', credentials: 'include' });
-      const d = await res.json();
+      const d = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(d.error);
-      setItems(list => list.map(x => (x.id === item.id ? { ...x, result: action === 'accept' ? 'accepted' : 'declined' } : x)));
       writeCache('requests', (readCache('requests') || []).filter(x => x.id !== item.id));
       writeCache('count:pending', Math.max(0, (readCache('count:pending') || 0) - 1));
-    } catch (e) { setError(e.message || 'Kuch galat ho gaya.'); }
-    finally { setBusy(''); }
+    } catch (e) {
+      setItems(list => list.map(x => (x.id === item.id ? { ...x, result: null } : x)));
+      setError(e.message || 'Kuch galat ho gaya.');
+    } finally { setBusy(''); }
   };
 
   const block = e => e.preventDefault(); // no long-press menu, no image drag

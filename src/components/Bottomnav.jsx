@@ -60,21 +60,25 @@ export default function BottomNav() {
   const [unread, setUnread] = useState(() => readCache('count:unread') ?? 0);
 
   useEffect(() => {
-    fetch('/api/connect/requests', { credentials: 'include' })
-      .then(r => r.json())
-      .then(d => { const n = d.requests?.length || 0; setPending(n); writeCache('count:pending', n); })
-      .catch(() => {});
-  }, [pathname]);
-
-  useEffect(() => {
     connectSocket();
+    const syncCounts = () => {
+      fetch('/api/connect/requests', { credentials: 'include' })
+        .then(r => r.json()).then(d => { const n = d.requests?.length || 0; setPending(n); writeCache('count:pending', n); }).catch(() => {});
+      fetch('/api/connect/unread', { credentials: 'include' })
+        .then(r => r.json()).then(d => { const n = d.count || 0; setUnread(n); writeCache('count:unread', n); }).catch(() => {});
+    };
+    syncCounts(); // fresh badges on every page/route change
     const onMessage = () => setUnread(n => n + 1);
     const onRequest = () => setPending(n => n + 1);
+    const onRemoved = () => setPending(n => Math.max(0, n - 1)); // I accepted/declined one (any tab)
     socket.on('message', onMessage);
     socket.on('request', onRequest);
-    fetch('/api/connect/unread', { credentials: 'include' })
-      .then(r => r.json()).then(d => { const n = d.count || 0; setUnread(n); writeCache('count:unread', n); }).catch(() => {});
-    return () => { socket.off('message', onMessage); socket.off('request', onRequest); };
+    socket.on('request:removed', onRemoved);
+    socket.on('connect', syncCounts); // (re)connected: badges might have missed events
+    return () => {
+      socket.off('message', onMessage); socket.off('request', onRequest);
+      socket.off('request:removed', onRemoved); socket.off('connect', syncCounts);
+    };
   }, [pathname]);
 
   const badges = { requests: pending, messages: unread };

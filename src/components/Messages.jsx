@@ -34,6 +34,8 @@ export default function Messages() {
   const [error, setError] = useState('');
   const reqId = useRef(0);
   const hasData = useRef(matches !== null); // cache ya server se data aa chuka hai?
+  const matchesRef = useRef(matches);
+  matchesRef.current = matches;
 
   const load = useCallback(() => {
     const myReq = ++reqId.current;
@@ -53,12 +55,33 @@ export default function Messages() {
       });
   }, []);
 
+  // Update the list from the event itself (no refetch): last message, unread badge, move to top.
+  const bump = useCallback((profileId, message, mine) => {
+    const list = matchesRef.current;
+    const i = list?.findIndex(x => x.profile.id === profileId) ?? -1;
+    if (i < 0) return load(); // unknown chat (new connection): fetch the list
+    const row = list[i];
+    const next = [
+      { ...row, unread: mine ? row.unread : (row.unread || 0) + 1, lastMessage: { text: message.text, mine, createdAt: message.createdAt } },
+      ...list.filter((_, j) => j !== i),
+    ];
+    setMatches(next); writeCache('matches', next);
+  }, [load]);
+
   useEffect(() => {
     connectSocket();
     load();
-    socket.on('message', load); // new message -> refresh list (last message + unread)
-    return () => socket.off('message', load);
-  }, [load]);
+    const onMessage = ({ fromProfileId, message }) => bump(fromProfileId, message, false);
+    const onSync = ({ profileId, message }) => bump(profileId, message, true);
+    socket.on('message', onMessage);
+    socket.on('message:sync', onSync);
+    socket.on('request:accepted', load); // someone accepted my request: new chat appears instantly
+    socket.on('connect', load);          // (re)connected: catch up on anything missed
+    return () => {
+      socket.off('message', onMessage); socket.off('message:sync', onSync);
+      socket.off('request:accepted', load); socket.off('connect', load);
+    };
+  }, [load, bump]);
 
   const block = e => e.preventDefault(); // no long-press menu, no image drag
 

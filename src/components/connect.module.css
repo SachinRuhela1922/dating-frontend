@@ -39,3 +39,7 @@
 .badge { min-width: 22px; padding: 2px 7px; border-radius: 999px; background: #6a3fd1; color: #fff; font-size: .78rem; font-weight: 700; text-align: center; }
 .status { margin: 0; font-size: .78rem; color: #6b647c; }
 .typingBubble { letter-spacing: 2px; }
+/* optimistic send states */
+.sending { opacity: .65; }
+.failed { background: #c0293f; cursor: pointer; }
+.retryHint { font-size: .75rem; opacity: .9; }
